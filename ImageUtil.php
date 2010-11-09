@@ -1,16 +1,15 @@
 <?php
-/*
- * Author:   Jani Mikkonen
- * Version:  1.3
- * Date:     2010-11-06
+/**
+ * Easy resize, filter and compression class for images.
+ *
  * Requires: Requires PHP5, GD library.
  * Optional: jpegtran, pngcrush.
  * Examples:
  *
  * include 'ImageUtil.php';
  * $options = array(
- *  'jpegtran_path' => '/path/to/jpegtran',
- *	'pngcrush_path' => '/path/to/pngcrush',
+ *   'jpegtran_path' => '/path/to/jpegtran',
+ *   'pngcrush_path' => '/path/to/pngcrush',
  * );
  * $resize = new ImageUtil('images/large/input.jpg', $options);
  * $resize->resizeImage(150, 100, 'crop');
@@ -22,17 +21,12 @@
  * $resize->resizeImage(320, 240);
  * $resize->saveImage('images/small/output2.jpg');
  *
- * Changelog:
- * 1.1 Added sharpen image, png alpha channels, watermark and rewrote the code.
- * 1.2 Added contrast, sepia, smooth, blur, interlace, scatter, pixelate and noise.
- * 1.3 Added jpegtran and pngcrush support plus options to position watermark.
+ * @author Jani Mikkonen <janisto@php.net>
+ * @link   http://www.mikkonen.info/imageutil/
  */
  
 class ImageUtil
 {
-	/*
-	 * Class variables
-	 */
 	private $options = array(
 		'jpegtran_path' => false,
 		'pngcrush_path' => false,
@@ -62,6 +56,7 @@ class ImageUtil
 	 *
 	 * @param string $file    an absolute URL or path to file
 	 * @param array  $options an array of options
+	 * @access public
 	 */
 	function __construct($file, array $options = array())
 	{
@@ -71,35 +66,41 @@ class ImageUtil
 			}
 		}
 		
-		/*
-		 * Open up the file
-		 */
+		// Open up the file
 		$this->image = $this->openImage($file);
 
-		/*
-		 * Get width and height
-		 */
+		// Get width and height
 		if($this->image) {
 			$this->width  = imagesx($this->image);
 			$this->height = imagesy($this->image);
 		}
-		/*
-		 * Sharpen resized image by default
-		 */
+		
+		// Sharpen resized image by default
 		$this->sharpen = true;
 		
 	}
 	
+	/**
+	 * Returns the value of the specified option.
+	 *
+	 * @param string $key The name of the option to retrieve
+	 * @return mixed
+	 * @access public
+	 */
 	public function getOption($key)
 	{
 		return isset($this->options[$key]) ? $this->options[$key] : false;
 	}
 
+	/**
+	 * Returns an image resource identifier on success, false on errors.
+	 *
+	 * @param string $file an absolute URL or path to file
+	 * @return mixed
+	 * @access private
+	 */
 	private function openImage($file)
 	{
-		/*
-		 * Get extension
-		 */
 		$extension = strtolower(strrchr($file, '.'));
 		switch($extension) {
 			case '.jpg':
@@ -119,22 +120,27 @@ class ImageUtil
 		return $img;
 	}
 
+	/**
+	 * Resize the image.
+	 *
+	 * @param string $newWidth new width of the image
+	 * @param string $newHeight new height of the image
+	 * @param string $option image resize option
+	 * @return mixed
+	 * @access public
+	 */
 	public function resizeImage($newWidth, $newHeight, $option="auto")
 	{
 		if(!$this->image) {
 			return false;
 		}
 		
-		/*
-		 * Get optimal width and height - based on $option
-		 */
+		// Get optimal width and height - based on $option
 		$optionArray = $this->getDimensions($newWidth, $newHeight, $option);
 		$this->optimalWidth  = round($optionArray['optimalWidth']);
 		$this->optimalHeight = round($optionArray['optimalHeight']);
 
-		/*
-		 * Resample - create image canvas of x, y size
-		 */
+		// Resample - create image canvas of x, y size
 		$this->imageResized = imagecreatetruecolor($this->optimalWidth, $this->optimalHeight);
 		if (imagetypes() & IMG_PNG) {
 			imagesavealpha($this->imageResized, true);
@@ -145,27 +151,28 @@ class ImageUtil
 		$this->saveState = false;
 		$this->greyscale = false;
 		$this->brightness = false;
-		/*
-		 * if option is 'crop', then crop too
-		 */
+		
+		// if option is 'crop', then crop too
 		if ($option == 'crop') {
 			$this->crop($this->optimalWidth, $this->optimalHeight, $newWidth, $newHeight);
 		}
 	}
 
+	/**
+	 * Crop the image.
+	 *
+	 * @access private
+	 */
 	private function crop($optimalWidth, $optimalHeight, $newWidth, $newHeight)
 	{
-		/*
-		 * Find center - this will be used for the crop
-		 */
+
+		// Find center - this will be used for the crop
 		$cropStartX = round(( $optimalWidth / 2) - ( $newWidth /2 ));
 		$cropStartY = round(( $optimalHeight/ 2) - ( $newHeight/2 ));
 
 		$crop = $this->imageResized;
 
-		/*
-		 * Now crop from center to exact requested size
-		 */
+		// Now crop from center to exact requested size
 		$this->imageResized = imagecreatetruecolor($newWidth , $newHeight);
 		if (imagetypes() & IMG_PNG) {
 			imagesavealpha($this->imageResized, true);
@@ -176,7 +183,12 @@ class ImageUtil
 		$this->optimalWidth  = $newWidth;
 		$this->optimalHeight = $newHeight;
 	}
-	
+
+	/**
+	 * Get dimensions of the image.
+	 *
+	 * @access private
+	 */
 	private function getDimensions($newWidth, $newHeight, $option)
 	{
 		switch ($option) {
@@ -206,6 +218,11 @@ class ImageUtil
 		return array('optimalWidth' => $optimalWidth, 'optimalHeight' => $optimalHeight);
 	}
 
+	/**
+	 * Get dimensions of the image by fixed height.
+	 *
+	 * @access private
+	 */
 	private function getSizeByFixedHeight($newHeight)
 	{
 		$ratio = $this->width / $this->height;
@@ -213,6 +230,11 @@ class ImageUtil
 		return $newWidth;
 	}
 
+	/**
+	 * Get dimensions of the image by fixed width.
+	 *
+	 * @access private
+	 */
 	private function getSizeByFixedWidth($newWidth)
 	{
 		$ratio = $this->height / $this->width;
@@ -220,6 +242,11 @@ class ImageUtil
 		return $newHeight;
 	}
 
+	/**
+	 * Get dimensions of the image automatically.
+	 *
+	 * @access private
+	 */
 	private function getSizeByAuto($newWidth, $newHeight)
 	{
 		if ($this->height < $this->width) { // Image to be resized is wider (landscape)
@@ -243,6 +270,11 @@ class ImageUtil
 		return array('optimalWidth' => $optimalWidth, 'optimalHeight' => $optimalHeight);
 	}
 
+	/**
+	 * Get optimal crop of the image.
+	 *
+	 * @access private
+	 */
 	private function getOptimalCrop($newWidth, $newHeight)
 	{
 		$heightRatio = $this->height / $newHeight;
@@ -257,22 +289,24 @@ class ImageUtil
 		return array('optimalWidth' => $optimalWidth, 'optimalHeight' => $optimalHeight);
 	}
 
+	/**
+	 * Resize the image.
+	 *
+	 * @param string	$savePath image save path
+	 * @param string	$imageQuality image quality
+	 * @param bool		$destroy destroy image resource identifiers on save
+	 * @access public
+	 */
 	public function saveImage($savePath, $imageQuality="80", $destroy=true)
 	{
 		$this->sharpenImage();
-		/*
-		 * Scale quality from 0-100 to 0-9
-		 */
+
+		// Scale quality from 0-100 to 0-9
 		$scaleQuality = round(($imageQuality/100) * 9);
 
-		/*
-		 * Invert quality setting as 0 is best, not 9
-		 */
+		// Invert quality setting as 0 is best, not 9
 		$invertScaleQuality = 9 - $scaleQuality;
-
-		/*
-		 * Get extension
-		 */
+		
 		$extension = strtolower(strrchr($savePath, '.'));
 		switch($extension) {
 			case '.jpg':
@@ -308,9 +342,6 @@ class ImageUtil
 				}
 				break;
 			default:
-				/*
-				 * No extension - No save.
-				 */
 				break;
 		}
 		
@@ -324,12 +355,19 @@ class ImageUtil
 		}
 	}
 
+	/**
+	 * Add watermark to the image.
+	 *
+	 * @param string	$file an absolute URL or path to file
+	 * @param string	$watermarkTransparency watermark transparency
+	 * @param string	$padding  watermark padding in pixels
+	 * @param string	$position position of watermark (TL, TR, BL or BR)
+	 * @return mixed
+	 * @access public
+	 */
 	public function addWatermark($file, $watermarkTransparency="40", $padding="2", $position="BR")
 	{
 		$this->checkImage();
-		/*
-		 * Get extension
-		 */
 		$extension = strtolower(strrchr($file, '.'));
 		switch($extension) {
 			case '.jpg':
@@ -343,9 +381,6 @@ class ImageUtil
 				$this->watermark = @imagecreatefrompng($file);
 				break;
 			default:
-				/*
-				 * No extension.
-				 */
 				return false;
 				break;
 		}
@@ -374,7 +409,13 @@ class ImageUtil
 		
 		$this->imagecopymergeAlpha($this->imageResized, $this->watermark, $dest_x, $dest_y, 0, 0, $wm_width, $wm_height, $watermarkTransparency);
 	}
-	
+
+	/**
+	 * Set greyscale.
+	 *
+	 * @param bool
+	 * @access public
+	 */
 	public function setGreyscale($value=true)
 	{
 		$this->checkImage();
@@ -382,6 +423,12 @@ class ImageUtil
 		imagefilter($this->imageResized, IMG_FILTER_GRAYSCALE);
 	}
 
+	/**
+	 * Set brightness.
+	 *
+	 * @param int $value level of brightness
+	 * @access public
+	 */
 	public function setBrightness($value="-20")
 	{
 		$this->checkImage();
@@ -389,6 +436,12 @@ class ImageUtil
 		imagefilter($this->imageResized, IMG_FILTER_BRIGHTNESS, $this->brightness);
 	}
 
+	/**
+	 * Set contrast.
+	 *
+	 * @param int $value level of contrast
+	 * @access public
+	 */
 	public function setContrast($value="-10")
 	{
 		$this->checkImage();
@@ -396,16 +449,26 @@ class ImageUtil
 		imagefilter($this->imageResized, IMG_FILTER_CONTRAST, $this->contrast);
 	}
 
+	/**
+	 * Set smooth.
+	 *
+	 * @param int $value level of smoothness
+	 * @access public
+	 */
 	public function setSmooth($value="6")
 	{
-		/*
-		 * You're not likely to want values outside of the range -8 to 8.
-		 */
+		// You're not likely to want values outside of the range -8 to 8.
 		$this->checkImage();
 		$this->smooth = $value;
 		imagefilter($this->imageResized, IMG_FILTER_SMOOTH, $this->smooth);
 	}
 
+	/**
+	 * Set blur.
+	 *
+	 * @param string $type blur type: gaussian or selective.
+	 * @access public
+	 */
 	public function setBlur($type="gaussian")
 	{
 		$this->checkImage();
@@ -417,11 +480,15 @@ class ImageUtil
 		}
 	}
 
+	/**
+	 * Set sepia.
+	 *
+	 * @param string $rgb RGB value
+	 * @access public
+	 */
 	public function setSepia($rgb="90, 55, 30")
 	{
-		/*
-		 * "94,38,18" seems quite nice, too.
-		 */
+		// "94,38,18" seems quite nice, too.
 		$this->checkImage();
 		$this->sepia = $rgb;
 		if(!$this->greyscale) {
@@ -433,7 +500,13 @@ class ImageUtil
 		$rgb = explode(",", $this->sepia);
 		imagefilter($this->imageResized, IMG_FILTER_COLORIZE, trim($rgb[0]), trim($rgb[1]), trim($rgb[2]));
 	}
-	
+
+	/**
+	 * Set interlace.
+	 *
+	 * @param bool
+	 * @access public
+	 */
 	public function setInterlace($value=true)
 	{
 		$this->checkImage();
@@ -441,6 +514,12 @@ class ImageUtil
 		$this->interlaceImage();
 	}
 
+	/**
+	 * Set scatter.
+	 *
+	 * @param int $value intensity
+	 * @access public
+	 */
 	public function setScatter($value="4")
 	{
 		$this->checkImage();
@@ -448,6 +527,12 @@ class ImageUtil
 		$this->scatterImage();
 	}
 
+	/**
+	 * Set pixelate.
+	 *
+	 * @param int $value size of pixels
+	 * @access public
+	 */
 	public function setPixelate($value="10")
 	{
 		$this->checkImage();
@@ -455,6 +540,12 @@ class ImageUtil
 		$this->pixelateImage();
 	}
 
+	/**
+	 * Set noise.
+	 *
+	 * @param int $value factor between 0 and 255
+	 * @access public
+	 */
 	public function setNoise($value="30")
 	{
 		$this->checkImage();
@@ -462,6 +553,12 @@ class ImageUtil
 		$this->addNoise();
 	}
 
+	/**
+	 * Set sharpen.
+	 *
+	 * @param bool
+	 * @access public
+	 */
 	public function setSharpen($value=true)
 	{
 		$this->sharpen = $value;
@@ -469,36 +566,42 @@ class ImageUtil
 
 	/**
 	 * This is like imagecopymerge, but it will handle alpha channel as well.
+	 *
+	 * @access private
 	 */
 	private function imagecopymergeAlpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct)
 	{
-		/*
-		 * create a cut resource
-		 */
+		// create a cut resource
 		$cut = imagecreatetruecolor($src_w, $src_h);
-		/*
-		 * make it transparent
-		 */
+		// make it transparent
 		$color = imagecolortransparent($cut, imagecolorallocatealpha($cut, 0, 0, 0, 127));
 		imagefill($cut, 0, 0, $color);
 		imagesavealpha($cut, true);
-		/*
-		 * copy that section of the background to the cut
-		 */
+		// copy that section of the background to the cut
 		imagecopy($cut, $dst_im, 0, 0, $dst_x, $dst_y, $src_w, $src_h);
-		/*
-		 * place the watermark
-		 */
+		// place the watermark
 		imagecopy($cut, $src_im, 0, 0, $src_x, $src_y, $src_w, $src_h);
 		imagecopymerge($dst_im, $cut, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct);
 	}
 
+	/**
+	 * Checks if resized image is already created.
+	 *
+	 * @access private
+	 */
 	private function checkImage()
 	{
 		if(!$this->imageResized) {
 			$this->resizeImage($this->width, $this->height);
 		}
 	}
+
+	/**
+	 * Returns temporary name/path for the image.
+	 * 
+	 * @return mixed
+	 * @access private
+	 */
 	private function getTmpPath($path) {
 		$extension = strtolower(strrchr($path, '.'));
 		$dirname = dirname($path);
@@ -523,21 +626,23 @@ class ImageUtil
 				$tmpname = $basename . '_tmp.png';
 				break;
 			default:
-				/*
-				 * No extension.
-				 */
 				return false;
 				break;
 		}
 		return $dirname . $tmpname;
 	}
+
+	/**
+	 * Finds optimal image sharpenin.
+	 *
+	 * Based on two things:
+	 * (1) the difference between the original size and the final size
+	 * (2) the final size
+	 *
+	 * @access private
+	 */
 	private function findSharp($orig, $final)
 	{
-		/*
-		 * Sharpen the image based on two things:
-		 * (1) the difference between the original size and the final size
-		 * (2) the final size
-		 */
 		$final  = $final * (750.0 / $orig);
 		$a      = 52;
 		$b      = -0.27810650887573124;
@@ -546,12 +651,13 @@ class ImageUtil
 		return max(round($result), 0);
 	}
 
+	/**
+	 * Sharpens the image with first save.
+	 *
+	 * @access private
+	 */
 	private function sharpenImage()
 	{
-		/*
-		 * Sharpen image with first save
-		 */
-		
 		$this->checkImage();
 
 		if(!$this->saveState && $this->sharpen == true) {
@@ -567,6 +673,11 @@ class ImageUtil
 		}
 	}
 
+	/**
+	 * Interlaces the image.
+	 *
+	 * @access private
+	 */
 	private function interlaceImage()
 	{
 		$imagex = $this->optimalWidth;
@@ -577,7 +688,12 @@ class ImageUtil
 			imageline($this->imageResized, 0, $y, $imagex, $y, $black);
 		}
 	}
-	
+
+	/**
+	 * Scatters the image.
+	 *
+	 * @access private
+	 */
 	private function scatterImage()
 	{
 		$imagex = $this->optimalWidth;
@@ -601,6 +717,11 @@ class ImageUtil
 		}
 	}
 
+	/**
+	 * Pixelates the image.
+	 *
+	 * @access private
+	 */
 	private function pixelateImage()
 	{
 		if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
@@ -643,6 +764,11 @@ class ImageUtil
 		}
 	}
 
+	/**
+	 * Adds noise to the image.
+	 *
+	 * @access private
+	 */
 	private function addNoise() {
 		$imagex = $this->optimalWidth;
 		$imagey = $this->optimalHeight;
@@ -672,6 +798,6 @@ class ImageUtil
 			}
 		}
 	}
-	
+
 }
 ?>

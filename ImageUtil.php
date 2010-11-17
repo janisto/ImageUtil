@@ -48,6 +48,7 @@ class ImageUtil
 	private $scatter;
 	private $pixelate;
 	private $noise;
+	private $rasterbate;
 	private $sharpen;
 	private $saveState;
 
@@ -554,6 +555,19 @@ class ImageUtil
 	}
 
 	/**
+	 * Set rasterbate.
+	 *
+	 * @param int $value maximum circle size in pixels
+	 * @access public
+	 */
+	public function setRasterbate($value="6")
+	{
+		$this->checkImage();
+		$this->rasterbate = $value;
+		$this->rasterbateImage();
+	}
+	
+	/**
 	 * Set sharpen.
 	 *
 	 * @param bool
@@ -754,9 +768,9 @@ class ImageUtil
 						$newb += $colour & 0xFF;
 					}
 					$numelements = count($colours);
-					$newr /= $numelements;
-					$newg /= $numelements;
-					$newb /= $numelements;
+					$newr = round($newr /= $numelements);
+					$newg = round($newg /= $numelements);
+					$newb = round($newb /= $numelements);
 					$newcol = imagecolorallocate($this->imageResized, $newr, $newg, $newb);
 					imagefilledrectangle($this->imageResized, $x, $y, $x + $blocksize - 1, $y + $blocksize - 1, $newcol);
 				}
@@ -794,6 +808,105 @@ class ImageUtil
 					if ($blue < 0) $blue = 0;
 					$newcol = imagecolorallocate($this->imageResized, $red, $green, $blue);
 					imagesetpixel($this->imageResized, $x, $y, $newcol);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Convert an RGB array into HSV (aka HSB) colour space.
+	 *
+	 * @param  array $rgb
+	 * @return array
+	 * @access private
+	 */
+	private function rgb2hsv($rgb){
+		$r = $rgb[0];
+		$g = $rgb[1];
+		$b = $rgb[2];
+
+		$minVal = min($r, $g, $b);
+		$maxVal = max($r, $g, $b);
+		$delta  = $maxVal - $minVal;
+		$v = $maxVal / 255;
+
+		if ($delta == 0) {
+			$h = 0;
+			$s = 0;
+		} else {
+			$s = $delta / $maxVal;
+			$delR = ((($maxVal - $r) / 6) + ($delta / 2)) / $delta;
+			$delG = ((($maxVal - $g) / 6) + ($delta / 2)) / $delta;
+			$delB = ((($maxVal - $b) / 6) + ($delta / 2)) / $delta;
+			if ($r == $maxVal){
+				$h = $delB - $delG;
+			} else if ($g == $maxVal) {
+				$h = (1 / 3) + $delR - $delB;
+			} else if ($b == $maxVal) {
+				$h = (2 / 3) + $delG - $delR;
+			}
+			if ($h < 0) {
+				$h++;
+			}
+			if ($h > 1) {
+				$h--;
+			}
+		}
+		$h = round($h * 360);
+		$s = round($s * 100);
+		$v = round($v * 100);
+		return array($h, $s, $v);
+	}
+	
+	/**
+	 * Rasterbates the image.
+	 *
+	 * @access private
+	 */
+	private function rasterbateImage()
+	{
+		$imagex = $this->optimalWidth;
+		$imagey = $this->optimalHeight;
+		$blocksize = $this->rasterbate;
+		$origImage = $this->imageResized;
+
+		$this->imageResized = imagecreatetruecolor($imagex, $imagey);
+		$background = imagecolorallocate($this->imageResized, 255, 255, 255);
+		imagefill($this->imageResized, 0, 0, $background);
+
+		for ($x = 0; $x < $imagex; $x += $blocksize) {
+			for ($y = 0; $y < $imagey; $y += $blocksize) {
+				$thiscol = imagecolorat($origImage, $x, $y);
+				$newr = 0;
+				$newg = 0;
+				$newb = 0;
+				$colours = array();
+				for ($k = $x; $k < $x + $blocksize; ++$k) {
+					for ($l = $y; $l < $y + $blocksize; ++$l) {
+						if ($k < 0) { $colours[] = $thiscol; continue; }
+						if ($k >= $imagex) { $colours[] = $thiscol; continue; }
+						if ($l < 0) { $colours[] = $thiscol; continue; }
+						if ($l >= $imagey) { $colours[] = $thiscol; continue; }
+						$colours[] = imagecolorat($origImage, $k, $l);
+					}
+				}
+				foreach($colours as $colour) {
+					$newr += ($colour >> 16) & 0xFF;
+					$newg += ($colour >> 8) & 0xFF;
+					$newb += $colour & 0xFF;
+				}
+				$numelements = count($colours);
+				$newr = round($newr /= $numelements);
+				$newg = round($newg /= $numelements);
+				$newb = round($newb /= $numelements);
+				$newcol = imagecolorallocate($this->imageResized, $newr, $newg, $newb);
+				$newx = ($x+$blocksize)-($blocksize/2);
+				$newy = ($y+$blocksize)-($blocksize/2);
+				$newrgb = array($newr, $newg, $newb);
+				$hsv = $this->rgb2hsv($newrgb);
+				$newsize = round($blocksize * ((100 - $hsv[2]) / 100));
+				if($newsize > 0) {
+					imagefilledellipse($this->imageResized, $newx, $newy, $newsize, $newsize, $newcol);
 				}
 			}
 		}

@@ -38,6 +38,7 @@ class ImageUtil
 	private $optimalHeight;
 	private $imageResized;
 	private $watermark;
+	private $polaroid;
 	private $greyscale;
 	private $brightness;
 	private $contrast;
@@ -183,6 +184,8 @@ class ImageUtil
 		
 		$this->optimalWidth  = $newWidth;
 		$this->optimalHeight = $newHeight;
+		
+		imagedestroy($crop);
 	}
 
 	/**
@@ -353,6 +356,9 @@ class ImageUtil
 			if($this->watermark) {
 				imagedestroy($this->watermark);
 			}
+			if($this->polaroid) {
+				imagedestroy($this->polaroid);
+			}
 		}
 	}
 
@@ -409,6 +415,46 @@ class ImageUtil
 		}
 		
 		$this->imagecopymergeAlpha($this->imageResized, $this->watermark, $dest_x, $dest_y, 0, 0, $wm_width, $wm_height, $watermarkTransparency);
+	}
+
+	/**
+	 * Create polaroid like image.
+	 *
+	 * @param string	$file an absolute URL or path to mask .png file
+	 * @param string	$top top position of resized image
+	 * @param string	$left left position of resized image
+	 * @return mixed
+	 * @access public
+	 */
+	public function createPolaroid($file, $top="0", $left="0")
+	{
+		$this->checkImage();
+		$extension = strtolower(strrchr($file, '.'));
+		switch($extension) {
+			case '.png':
+				$this->polaroid = @imagecreatefrompng($file);
+				break;
+			default:
+				return false;
+				break;
+		}
+
+		$p_width = imagesx($this->polaroid);
+		$p_height = imagesy($this->polaroid);
+		$image_x = (int) $top;
+		$image_y = (int) $left;
+		
+		$img = imagecreatetruecolor($p_width, $p_height);
+		$color = imagecolortransparent($img, imagecolorallocatealpha($img, 0, 0, 0, 127));
+		imagefill($img, 0, 0, $color);
+		imagesavealpha($img, true);
+		imagealphablending($img, true);
+		
+		imagecopy($img, $this->imageResized, $image_x, $image_y, 0, 0, $this->optimalWidth, $this->optimalHeight);
+		imagecopy($img, $this->polaroid, 0, 0, 0, 0, $p_width, $p_height);
+
+		imagedestroy($this->imageResized);
+		$this->imageResized = $img;
 	}
 
 	/**
@@ -578,6 +624,39 @@ class ImageUtil
 		$this->sharpen = $value;
 	}
 
+	/**
+	 * Rotate image.
+	 *
+	 * @param mixed $value rotation angle in degrees between -360 and 360 or auto
+	 * @param int $bgcolor HEX color of the uncovered zone after the rotation
+	 * @access public
+	 */
+	public function rotate($value="auto", $bgcolor="ffffff")
+	{
+		$this->checkImage();
+		if($value == "auto") {
+			$value = mt_rand(-6, 6);
+		}
+		if($value < -360 || $value > 360) {
+			$value = 0;
+		}
+		if($value < 0) {
+			$value = 360 + $value;
+		}
+		if($bgcolor == "alpha") {
+			// Experimental. GD imagerotate seems to be quite buggy with alpha transparency.
+			imagealphablending($this->imageResized, false);
+			$color = imagecolorallocatealpha($this->imageResized, 255, 255, 255, 127);
+			imagecolortransparent($this->imageResized, $color);
+			$this->imageResized = imagerotate($this->imageResized, $value, $color);
+			imagesavealpha($this->imageResized, true);
+		} else {
+			$bgcolor = str_replace("#", "", strtoupper($bgcolor));
+			$color = hexdec($bgcolor);
+			$this->imageResized = imagerotate($this->imageResized, $value, $color);
+		}
+	}
+	
 	/**
 	 * This is like imagecopymerge, but it will handle alpha channel as well.
 	 *

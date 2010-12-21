@@ -22,7 +22,7 @@
  * $resize->saveImage('images/small/output2.jpg');
  *
  * @author Jani Mikkonen <janisto@php.net>
- * @link   http://www.mikkonen.info/imageutil/
+ * @link   https://github.com/janisto/ImageUtil/
  */
  
 class ImageUtil
@@ -56,8 +56,8 @@ class ImageUtil
 	/**
 	 * Constructor.
 	 *
-	 * @param string $file    an absolute URL or path to file
-	 * @param array  $options an array of options
+	 * @param string	$file an absolute URL or path to file
+	 * @param array		$options an array of options
 	 * @access public
 	 */
 	function __construct($file, array $options = array())
@@ -85,7 +85,7 @@ class ImageUtil
 	/**
 	 * Returns the value of the specified option.
 	 *
-	 * @param string $key The name of the option to retrieve
+	 * @param string	$key The name of the option to retrieve
 	 * @return mixed
 	 * @access public
 	 */
@@ -97,7 +97,7 @@ class ImageUtil
 	/**
 	 * Returns an image resource identifier on success, false on errors.
 	 *
-	 * @param string $file an absolute URL or path to file
+	 * @param string	$file an absolute URL or path to file
 	 * @return mixed
 	 * @access private
 	 */
@@ -125,9 +125,9 @@ class ImageUtil
 	/**
 	 * Resize the image.
 	 *
-	 * @param string $newWidth new width of the image
-	 * @param string $newHeight new height of the image
-	 * @param string $option image resize option
+	 * @param int		$newWidth new width of the image in pixels
+	 * @param int		$newHeight new height of the image in pixels
+	 * @param string	$option image resize option
 	 * @return mixed
 	 * @access public
 	 */
@@ -138,7 +138,7 @@ class ImageUtil
 		}
 		
 		// Get optimal width and height - based on $option
-		$optionArray = $this->getDimensions($newWidth, $newHeight, $option);
+		$optionArray = $this->getDimensions((int) $newWidth, (int) $newHeight, $option);
 		$this->optimalWidth  = round($optionArray['optimalWidth']);
 		$this->optimalHeight = round($optionArray['optimalHeight']);
 
@@ -150,6 +150,7 @@ class ImageUtil
 		}
 		imagecopyresampled($this->imageResized, $this->image, 0, 0, 0, 0, $this->optimalWidth, $this->optimalHeight, $this->width, $this->height);
 
+		// reset
 		$this->saveState = false;
 		$this->greyscale = false;
 		$this->brightness = false;
@@ -297,7 +298,7 @@ class ImageUtil
 	 * Resize the image.
 	 *
 	 * @param string	$savePath image save path
-	 * @param string	$imageQuality image quality
+	 * @param int		$imageQuality image quality
 	 * @param bool		$destroy destroy image resource identifiers on save
 	 * @access public
 	 */
@@ -366,8 +367,8 @@ class ImageUtil
 	 * Add watermark to the image.
 	 *
 	 * @param string	$file an absolute URL or path to file
-	 * @param string	$watermarkTransparency watermark transparency
-	 * @param string	$padding  watermark padding in pixels
+	 * @param int		$watermarkTransparency watermark transparency (0-100)
+	 * @param int		$padding watermark padding in pixels
 	 * @param string	$position position of watermark (TL, TR, BL or BR)
 	 * @return mixed
 	 * @access public
@@ -394,7 +395,8 @@ class ImageUtil
 		
 		$wm_width = imagesx($this->watermark);
 		$wm_height = imagesy($this->watermark);
-
+		$padding = (int) $padding;
+		
 		switch(strtoupper($position)) {
 			case 'TL': // top left
 				$dest_x = $padding;
@@ -414,19 +416,20 @@ class ImageUtil
 				break;
 		}
 		
-		$this->imagecopymergeAlpha($this->imageResized, $this->watermark, $dest_x, $dest_y, 0, 0, $wm_width, $wm_height, $watermarkTransparency);
+		$this->imagecopymergeAlpha($this->imageResized, $this->watermark, $dest_x, $dest_y, 0, 0, $wm_width, $wm_height, (int) $watermarkTransparency);
 	}
 
 	/**
 	 * Create polaroid like image.
 	 *
 	 * @param string	$file an absolute URL or path to mask .png file
-	 * @param string	$top top position of resized image
-	 * @param string	$left left position of resized image
+	 * @param int		$top top position of resized image
+	 * @param int		$left left position of resized image
+	 * @param string	$bgcolor HEX color of the uncovered/transparent zone
 	 * @return mixed
 	 * @access public
 	 */
-	public function createPolaroid($file, $top="0", $left="0")
+	public function createPolaroid($file, $top="0", $left="0", $bgcolor="")
 	{
 		$this->checkImage();
 		$extension = strtolower(strrchr($file, '.'));
@@ -445,8 +448,14 @@ class ImageUtil
 		$image_y = (int) $left;
 		
 		$img = imagecreatetruecolor($p_width, $p_height);
-		$color = imagecolortransparent($img, imagecolorallocatealpha($img, 0, 0, 0, 127));
+		if($bgcolor) {
+			$bgcolor = str_replace("#", "", strtoupper($bgcolor));
+			$color = hexdec($bgcolor);
+		} else {
+			$color = imagecolortransparent($img, imagecolorallocatealpha($img, 0, 0, 0, 127));
+		}
 		imagefill($img, 0, 0, $color);
+
 		imagesavealpha($img, true);
 		imagealphablending($img, true);
 		
@@ -627,8 +636,8 @@ class ImageUtil
 	/**
 	 * Rotate image.
 	 *
-	 * @param mixed $value rotation angle in degrees between -360 and 360 or auto
-	 * @param int $bgcolor HEX color of the uncovered zone after the rotation
+	 * @param mixed		$value rotation angle in degrees between -360 and 360 or auto
+	 * @param string	$bgcolor HEX color of the uncovered zone after the rotation
 	 * @access public
 	 */
 	public function rotate($value="auto", $bgcolor="ffffff")

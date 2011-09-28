@@ -62,9 +62,23 @@ class ImageUtil
 	 */
 	function __construct($file, array $options = array())
 	{
-		foreach ($options as $key => $value) {
-			if (array_key_exists($key, $this->options) && is_executable($value)) {
-				$this->options[$key] = $value;
+		if(function_exists('exec')) {
+			// Enable compression by default
+			if(is_executable('/usr/bin/jpegtran')) {
+				$this->options['jpegtran_path'] = '/usr/bin/jpegtran';
+			}
+			if(is_executable('/usr/bin/pngcrush')) {
+				$this->options['pngcrush_path'] = '/usr/bin/pngcrush';
+			}
+			foreach ($options as $key => $value) {
+				if (array_key_exists($key, $this->options)) {
+					// Add option to disable compression
+					if($value && is_executable($value)){
+						$this->options[$key] = $value;
+					} else {
+						$this->options[$key] = false;
+					}
+				}
 			}
 		}
 		
@@ -295,7 +309,7 @@ class ImageUtil
 	}
 
 	/**
-	 * Resize the image.
+	 * Save the image.
 	 *
 	 * @param string	$savePath image save path
 	 * @param int		$imageQuality image quality
@@ -320,7 +334,7 @@ class ImageUtil
 					if($this->getOption('jpegtran_path')) {
 						$tmpPath = $this->getTmpPath($savePath);
 						imagejpeg($this->imageResized, $tmpPath, $imageQuality);
-						$cmd = $this->getOption('jpegtran_path') . ' -copy none -optimize -progressive ' . $tmpPath . ' ' . $savePath;
+						$cmd = $this->getOption('jpegtran_path') . ' -copy none -optimize -progressive ' . $tmpPath . ' > ' . $savePath;
 						exec($cmd);
 						@unlink($tmpPath);
 					} else {

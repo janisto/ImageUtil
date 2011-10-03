@@ -3,8 +3,26 @@ ImageUtil
 
 Easy resize, filter and compression class for images.
 
+All image manipulations are applied to a temporary image. Only the save() method is permanent.
+
+Requires: PHP5 and GD2 library.
+
+Optional: jpegtran, pngcrush.
+
 Changelog
 ---------
+
+### v2.0
+
+- BC break!
+- Code refactor and DocBlock clean up.
+- Implemented method chaining.
+- Added option to render generated image without saving.
+
+### v1.6
+
+- Fixed bug #1: Invalid shell command with jpegtran.
+- Enabled jpegtran/pngcrush compression by default.
 
 ### v1.5
 
@@ -33,12 +51,19 @@ Usage
 -----
 
 	include 'ImageUtil.php';
-	$resize = new ImageUtil('path/to/image.jpg');
+
 	// an absolute URL or path to file. Can be .jpg, .jpeg, .gif or .png
-	$resize->resizeImage(320, 240);
-	// width and height
-	$resize->saveImage('path/to/output_1.jpg');
-	// path to file. Can be .jpg, .jpeg, .gif or .png
+	$img = new ImageUtil('images/large/input1.jpg');
+	// set width and height and then render image. Can be .jpg, .jpeg, .gif or .png
+	$img->resize(320, 240)->render('output.jpg');
+	
+	// an absolute URL or path to file. Can be .jpg, .jpeg, .gif or .png
+	$img = new ImageUtil('images/large/input2.jpg');
+	$img->resize(150, 100, 'crop')
+		// add watermark
+		->watermark('images/large/watermark.png')
+		// save path to file. Can be .jpg, .jpeg, .gif or .png
+		->save('images/small/output.jpg', 80);
 
 Examples
 --------

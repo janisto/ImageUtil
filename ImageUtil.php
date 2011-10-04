@@ -28,54 +28,73 @@
  * </code>
  * 
  * @author	Jani Mikkonen <janisto@php.net>
+ * @package ImageUtil
+ * @license	public domain
+ * @link	https://github.com/janisto/ImageUtil/
+ */
+
+/**
+ * Main class for ImageUtil
+ *
+ * @throws Exception
+ * @author	Jani Mikkonen <janisto@php.net>
+ * @package ImageUtil
  * @license	public domain
  * @link	https://github.com/janisto/ImageUtil/
  */
 class ImageUtil
 {
 	/**
-     * Compression options. Path or false.
-     * @var array
-     */
+	 * Compression options. Path or false.
+	 * @var array
+	 */
 	private $options = array(
 		'jpegtran_path' => false,
 		'pngcrush_path' => false,
 	);
+
 	/**
 	 * Image resource identifier.
 	 * @var resource
 	 */
 	private $image;
+
 	/**
 	 * Image width.
 	 * @var int
 	 */
 	private $width;
+
 	/**
 	 * Image height.
 	 * @var int
 	 */
 	private $height;
+
 	/**
 	 * Calculated optimal image width.
 	 * @var int
 	 */
 	private $optimalWidth;
+
 	/**
 	 * Calculated optimal image height.
 	 * @var int
 	 */
 	private $optimalHeight;
+
 	/**
 	 * Resized image resource identifier.
 	 * @var resource
 	 */
 	private $imageResized;
+
 	/**
 	 * Sharpen image state.
 	 * @var bool
 	 */
 	private $sharpen;
+
 	/**
 	 * Save image state.
 	 * @var bool

@@ -1,0 +1,65 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>ImageUtil</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" href="css/jquery-ui.css" type="text/css"></link><link rel="stylesheet" href="css/docblox/jquery-ui-1.8.16.custom.css" type="text/css"></link><link rel="stylesheet" href="css/jquery.treeview.css" type="text/css"></link><link rel="stylesheet" href="css/theme.css" type="text/css"></link><script type="text/javascript" src="js/jquery-1.4.2.min.js"></script><script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script><script type="text/javascript" src="js/jquery.cookie.js"></script><script type="text/javascript" src="js/jquery.treeview.js"></script><script type="text/javascript">
+            $(document).ready(function() {
+                $(".filetree").treeview({
+                    collapsed: true,
+                    persist: "cookie"
+                });
+
+                $("#accordion").accordion({
+                    collapsible: true,
+                    autoHeight:  false,
+                    fillSpace:   true
+                });
+
+                $(".tabs").tabs();
+            });
+        </script></head><body><script xmlns="" type="text/javascript">
+            $(function() {
+                $("#sidebar-nav").accordion({
+                    autoHeight: false,
+                    navigation: true,
+                    collapsible: true
+                }).accordion("activate", false)
+                .find('a.link').unbind('click').click(function(ev){
+                    ev.cancelBubble = true; // IE
+                    if (ev.stopPropagation) {
+                        ev.stopPropagation(); // the rest
+                    }
+
+                    return true;
+                }).prev().prev().remove();
+
+                $("#sidebar-nav>h3").click(function(){
+                    if ($(this).attr('initialized') == 'true') return;
+
+                    $(this).next().find(".sidebar-nav-tree").treeview({
+                        collapsed: true,
+                        persist: "cookie"
+                    });
+                    $(this).attr('initialized', true);
+                });
+            });
+        </script><div xmlns="" id="sidebar">
+<div id="sidebar-header">
+<h1>ImageUtil</h1>
+<div style="clear: both"></div>
+</div>
+<div id="sidebar-nav">
+<h3 id="sidebar-dashboard">
+<img class="icon" src="css/docblox/images/icons/dashboard.png" alt="Dashboard"><a href="content.html" class="link" target="content">Dashboard</a>
+</h3>
+<div style="display: none"></div>
+<h3 id="sidebar-files">
+<img src="css/docblox/images/icons/files.png" alt="Files"><a href="#files">Files</a>
+</h3>
+<div class="sidebar-section"><ul class="sidebar-nav-tree"><li class="closed">
+<span class="file"><a href="db_ImageUtil.html" target="content">ImageUtil.php</a></span><ul id="files_d3c21ad5aa7ca2e073f723c3420dd111" class="filetree"><li><span class="class"><a href="db_ImageUtil.html#%5CImageUtil" target="content">ImageUtil<br></a></span></li></ul>
+</li></ul></div>
+<h3 id="sidebar-packages">
+<img src="css/docblox/images/icons/packages.png" alt="Packages"><a href="#packages">Packages</a>
+</h3>
+<div class="sidebar-section sidebar-tree"><ul class="sidebar-nav-tree"><li class="closed">
+<span class="folder">ImageUtil</span><ul><li><span class="class"><a href="db_ImageUtil.html#%5CImageUtil" target="content">ImageUtil</a></span></li></ul>
+</li></ul></div>
+</div>
+</div></body></html>

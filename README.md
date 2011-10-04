@@ -65,6 +65,11 @@ Usage
 		// save path to file. Can be .jpg, .jpeg, .gif or .png
 		->save('images/small/output.jpg', 80);
 
+Documentation
+--------
+
+Documentation can be found here: [http://janisto.github.com/ImageUtil/](http://janisto.github.com/ImageUtil/)
+
 Examples
 --------
 

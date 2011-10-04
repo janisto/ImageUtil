@@ -609,7 +609,7 @@ class ImageUtil
 	}
 
 	/**
-	 * Add mask layer to image. You create for example polaroid like images.
+	 * Add mask layer to image. You can create for example polaroid like images.
 	 *
 	 * This method is chainable.
 	 *

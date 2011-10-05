@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <project version="0.15.0" title="ImageUtil">
-  <file path="ImageUtil.php" hash="d3c21ad5aa7ca2e073f723c3420dd111" package="ImageUtil">
+  <file path="ImageUtil.php" hash="c833f32160f70ee71490f492b42382ae" package="ImageUtil">
     <docblock>
       <description>Easy resize, filter and compression class for images.</description>
       <long-description>&lt;p&gt;All image manipulations are applied to a temporary image. Only the save() method is permanent.&lt;/p&gt;
@@ -13,18 +13,23 @@
 
 &lt;pre&gt;&lt;code&gt;include 'ImageUtil.php';
 
+// Render image without saving example:
+
 // an absolute URL or path to file. Can be .jpg, .jpeg, .gif or .png
 $img = new ImageUtil('images/large/input1.jpg');
 // set width and height and then render image. Can be .jpg, .jpeg, .gif or .png
 $img-&gt;resize(320, 240)-&gt;render('output.jpg');
 
+// Save image example:
+
 // an absolute URL or path to file. Can be .jpg, .jpeg, .gif or .png
 $img = new ImageUtil('images/large/input2.jpg');
+// set width, height and image resize option
 $img-&gt;resize(150, 100, 'crop')
        // add watermark
        -&gt;watermark('images/large/watermark.png')
        // save path to file. Can be .jpg, .jpeg, .gif or .png
-       -&gt;save('images/small/output.jpg', 80);
+       -&gt;save('images/small/output.jpg');
 &lt;/code&gt;&lt;/pre&gt;
 </long-description>
       <tag line="2" name="author" description="Jani Mikkonen &lt;janisto@php.net&gt;"/>
@@ -32,7 +37,7 @@ $img-&gt;resize(150, 100, 'crop')
       <tag line="2" name="license" description="public domain"/>
       <tag line="2" name="link" description="https://github.com/janisto/ImageUtil/" link="https://github.com/janisto/ImageUtil/"/>
     </docblock>
-    <class final="false" abstract="false" line="45" namespace="default" package="ImageUtil">
+    <class final="false" abstract="false" line="50" namespace="default" package="ImageUtil">
       <name>ImageUtil</name>
       <extends/>
       <full_name>\ImageUtil</full_name>
@@ -40,539 +45,574 @@ $img-&gt;resize(150, 100, 'crop')
         <description>Main class for ImageUtil</description>
         <long-description>
 </long-description>
-        <tag line="36" name="throws" description="" type="\Exception">
+        <tag line="41" name="throws" description="invalid image" type="\Exception">
           <type by_reference="false">\Exception</type>
         </tag>
-        <tag line="36" name="author" description="Jani Mikkonen &lt;janisto@php.net&gt;"/>
-        <tag line="36" name="package" description="ImageUtil"/>
-        <tag line="36" name="license" description="public domain"/>
-        <tag line="36" name="link" description="https://github.com/janisto/ImageUtil/" link="https://github.com/janisto/ImageUtil/"/>
+        <tag line="41" name="author" description="Jani Mikkonen &lt;janisto@php.net&gt;"/>
+        <tag line="41" name="package" description="ImageUtil"/>
+        <tag line="41" name="license" description="public domain"/>
+        <tag line="41" name="link" description="https://github.com/janisto/ImageUtil/" link="https://github.com/janisto/ImageUtil/"/>
       </docblock>
       
-     
-      <method final="false" abstract="false" static="false" visibility="public" line="111" package="Default">
+      
+      
+      
+      
+      
+      
+      
+      
+      <method final="false" abstract="false" static="false" visibility="public" line="116" package="Default">
         <name>__construct</name>
         <docblock>
           <description>Constructor.</description>
           <long-description>
 </long-description>
-          <tag line="104" name="throws" description="" type="\Exception">
+          <tag line="109" name="throws" description="invalid image" type="\Exception">
             <type by_reference="false">\Exception</type>
           </tag>
-          <tag line="104" name="param" description="an absolute URL or path to file" type="string" variable="$file">
+          <tag line="109" name="param" description="an absolute URL or path to file" type="string" variable="$file">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="104" name="param" description="an array of options" type="array" variable="$options">
+          <tag line="109" name="param" description="an array of options" type="array" variable="$options">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
-        <argument line="111">
+        <argument line="116">
           <name>$file</name>
           <default/>
           <type/>
         </argument>
-        <argument line="111">
+        <argument line="116">
           <name>$options</name>
           <default>array()</default>
           <type>array</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="151" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="156" package="Default">
         <name>getOption</name>
         <docblock>
           <description>Returns the value of the specified option.</description>
           <long-description>
 </long-description>
-          <tag line="144" name="param" description="The name of the option to retrieve" type="string" variable="$key">
+          <tag line="149" name="param" description="the name of the option to retrieve" type="string" variable="$key">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="144" name="return" description="option or false" type="mixed">
+          <tag line="149" name="return" description="option or false" type="mixed">
             <type by_reference="false">mixed</type>
           </tag>
-          <tag line="144" name="access" description="public"/>
+          <tag line="149" name="access" description="public"/>
         </docblock>
-        <argument line="151">
+        <argument line="156">
           <name>$key</name>
           <default/>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="167" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="172" package="Default">
         <name>resize</name>
         <docblock>
           <description>Resize the image. Must be called first if resize is required since this will reset all filters for image.</description>
           <long-description>&lt;p&gt;This method is chainable.&lt;/p&gt;
 </long-description>
-          <tag line="156" name="param" description="new width of the image in pixels" type="int" variable="$newWidth">
+          <tag line="161" name="param" description="new width of the image in pixels" type="int" variable="$newWidth">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="156" name="param" description="new height of the image in pixels" type="int" variable="$newHeight">
+          <tag line="161" name="param" description="new height of the image in pixels" type="int" variable="$newHeight">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="156" name="param" description="one of the image resize options: exact, portrait, landscape, crop or auto. Defaults to auto." type="string" variable="$option">
+          <tag line="161" name="param" description="one of the image resize options: exact, portrait, landscape, crop or auto. Default: 'auto'." type="string" variable="$option">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="156" name="return" description="" type="object">
+          <tag line="161" name="return" description="the current object for fluent interface" type="object">
             <type by_reference="false">object</type>
           </tag>
-          <tag line="156" name="access" description="public"/>
+          <tag line="161" name="access" description="public"/>
         </docblock>
-        <argument line="167">
+        <argument line="172">
           <name>$newWidth</name>
           <default/>
           <type/>
         </argument>
-        <argument line="167">
+        <argument line="172">
           <name>$newHeight</name>
           <default/>
           <type/>
         </argument>
-        <argument line="167">
+        <argument line="172">
           <name>$option</name>
           <default>'auto'</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="205" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="211" package="Default">
         <name>blur</name>
         <docblock>
           <description>Set blur.</description>
           <long-description>&lt;p&gt;This method is chainable.&lt;/p&gt;
 </long-description>
-          <tag line="196" name="param" description="blur type: gaussian or selective" type="string" variable="$type">
+          <tag line="201" name="throws" description="missing imagefilter function" type="\Exception">
+            <type by_reference="false">\Exception</type>
+          </tag>
+          <tag line="201" name="param" description="blur type: gaussian or selective. Default: 'gaussian'." type="string" variable="$type">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="196" name="return" description="" type="object">
+          <tag line="201" name="return" description="the current object for fluent interface" type="object">
             <type by_reference="false">object</type>
           </tag>
-          <tag line="196" name="access" description="public"/>
+          <tag line="201" name="access" description="public"/>
         </docblock>
-        <argument line="205">
+        <argument line="211">
           <name>$type</name>
           <default>'gaussian'</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="225" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="236" package="Default">
         <name>brightness</name>
         <docblock>
           <description>Set brightness.</description>
           <long-description>&lt;p&gt;This method is chainable.&lt;/p&gt;
 </long-description>
-          <tag line="216" name="param" description="level of brightness between -255 to 255" type="int" variable="$value">
+          <tag line="226" name="throws" description="missing imagefilter function" type="\Exception">
+            <type by_reference="false">\Exception</type>
+          </tag>
+          <tag line="226" name="param" description="level of brightness between -255 to 255. Default: -20." type="int" variable="$value">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="216" name="return" description="" type="object">
+          <tag line="226" name="return" description="the current object for fluent interface" type="object">
             <type by_reference="false">object</type>
           </tag>
-          <tag line="216" name="access" description="public"/>
+          <tag line="226" name="access" description="public"/>
         </docblock>
-        <argument line="225">
+        <argument line="236">
           <name>$value</name>
           <default>-20</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="242" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="258" package="Default">
         <name>contrast</name>
         <docblock>
           <description>Set contrast.</description>
           <long-description>&lt;p&gt;This method is chainable.&lt;/p&gt;
 </long-description>
-          <tag line="233" name="param" description="level of contrast between -255 to 255" type="int" variable="$value">
+          <tag line="248" name="throws" description="missing imagefilter function" type="\Exception">
+            <type by_reference="false">\Exception</type>
+          </tag>
+          <tag line="248" name="param" description="level of contrast between -255 to 255. Default: -10." type="int" variable="$value">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="233" name="return" description="" type="object">
+          <tag line="248" name="return" description="the current object for fluent interface" type="object">
             <type by_reference="false">object</type>
           </tag>
-          <tag line="233" name="access" description="public"/>
+          <tag line="248" name="access" description="public"/>
         </docblock>
-        <argument line="242">
+        <argument line="258">
           <name>$value</name>
           <default>-10</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="258" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="279" package="Default">
         <name>greyscale</name>
         <docblock>
           <description>Convert image to greyscale.</description>
           <long-description>&lt;p&gt;This method is chainable.&lt;/p&gt;
 </long-description>
-          <tag line="250" name="return" description="" type="object">
+          <tag line="270" name="throws" description="missing imagefilter function" type="\Exception">
+            <type by_reference="false">\Exception</type>
+          </tag>
+          <tag line="270" name="return" description="the current object for fluent interface" type="object">
             <type by_reference="false">object</type>
           </tag>
-          <tag line="250" name="access" description="public"/>
+          <tag line="270" name="access" description="public"/>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="273" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="298" package="Default">
         <name>interlace</name>
         <docblock>
           <description>Interlace image.</description>
           <long-description>&lt;p&gt;This method is chainable.&lt;/p&gt;
 </long-description>
-          <tag line="265" name="return" description="" type="object">
+          <tag line="290" name="return" description="the current object for fluent interface" type="object">
             <type by_reference="false">object</type>
           </tag>
-          <tag line="265" name="access" description="public"/>
+          <tag line="290" name="access" description="public"/>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="295" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="321" package="Default">
         <name>noise</name>
         <docblock>
           <description>Set noise.</description>
           <long-description>&lt;p&gt;This method is chainable.&lt;/p&gt;
 </long-description>
-          <tag line="286" name="param" description="factor between 0 and 255" type="int" variable="$value">
+          <tag line="312" name="param" description="factor between 0 and 255. Default: 30." type="int" variable="$value">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="286" name="return" description="" type="object">
+          <tag line="312" name="return" description="the current object for fluent interface" type="object">
             <type by_reference="false">object</type>
           </tag>
-          <tag line="286" name="access" description="public"/>
+          <tag line="312" name="access" description="public"/>
         </docblock>
-        <argument line="295">
+        <argument line="321">
           <name>$value</name>
           <default>30</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="338" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="366" package="Default">
         <name>pixelate</name>
         <docblock>
           <description>Set pixelate.</description>
           <long-description>&lt;p&gt;This method is chainable.&lt;/p&gt;
 </long-description>
-          <tag line="329" name="param" description="size of pixels" type="int" variable="$value">
+          <tag line="356" name="param" description="size of pixels. Default: 10." type="int" variable="$value">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="329" name="return" description="" type="object">
+          <tag line="356" name="param" description="use native GD library pixelate filter if available. Enabled by default." type="bool" variable="$native">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="356" name="return" description="the current object for fluent interface" type="object">
             <type by_reference="false">object</type>
           </tag>
-          <tag line="329" name="access" description="public"/>
+          <tag line="356" name="access" description="public"/>
         </docblock>
-        <argument line="338">
+        <argument line="366">
           <name>$value</name>
           <default>10</default>
           <type/>
         </argument>
+        <argument line="366">
+          <name>$native</name>
+          <default>true</default>
+          <type/>
+        </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="390" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="420" package="Default">
         <name>rasterbate</name>
         <docblock>
           <description>Set rasterbate.</description>
           <long-description>&lt;p&gt;This method is chainable.&lt;/p&gt;
 </long-description>
-          <tag line="381" name="param" description="maximum circle size in pixels" type="int" variable="$value">
+          <tag line="411" name="param" description="maximum circle size in pixels. Default: 6." type="int" variable="$value">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="381" name="return" description="" type="object">
+          <tag line="411" name="return" description="the current object for fluent interface" type="object">
             <type by_reference="false">object</type>
           </tag>
-          <tag line="381" name="access" description="public"/>
+          <tag line="411" name="access" description="public"/>
         </docblock>
-        <argument line="390">
+        <argument line="420">
           <name>$value</name>
           <default>6</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="452" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="483" package="Default">
         <name>rotate</name>
         <docblock>
           <description>Rotate image.</description>
           <long-description>&lt;p&gt;This method is chainable.&lt;/p&gt;
 </long-description>
-          <tag line="442" name="param" description="rotation angle in degrees between -360 and 360 or random" type="mixed" variable="$value">
+          <tag line="473" name="param" description="rotation angle in degrees between -360 and 360 or random. Default: 'random'." type="mixed" variable="$value">
             <type by_reference="false">mixed</type>
           </tag>
-          <tag line="442" name="param" description="HEX color of the uncovered zone after the rotation" type="string" variable="$bgColor">
+          <tag line="473" name="param" description="HEX color of the uncovered zone after the rotation. Default: 'ffffff'." type="string" variable="$bgColor">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="442" name="return" description="" type="object">
+          <tag line="473" name="return" description="the current object for fluent interface" type="object">
             <type by_reference="false">object</type>
           </tag>
-          <tag line="442" name="access" description="public"/>
+          <tag line="473" name="access" description="public"/>
         </docblock>
-        <argument line="452">
+        <argument line="483">
           <name>$value</name>
           <default>'random'</default>
           <type/>
         </argument>
-        <argument line="452">
+        <argument line="483">
           <name>$bgColor</name>
           <default>'ffffff'</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="487" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="524" package="Default">
         <name>scatter</name>
         <docblock>
           <description>Set scatter.</description>
           <long-description>&lt;p&gt;This method is chainable.&lt;/p&gt;
 </long-description>
-          <tag line="478" name="param" description="intensity" type="int" variable="$value">
+          <tag line="515" name="param" description="intensity. Default: 4." type="int" variable="$value">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="478" name="return" description="" type="object">
+          <tag line="515" name="return" description="the current object for fluent interface" type="object">
             <type by_reference="false">object</type>
           </tag>
-          <tag line="478" name="access" description="public"/>
+          <tag line="515" name="access" description="public"/>
         </docblock>
-        <argument line="487">
+        <argument line="524">
           <name>$value</name>
           <default>4</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="523" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="562" package="Default">
         <name>sepia</name>
         <docblock>
           <description>Set sepia.</description>
           <long-description>&lt;p&gt;This method is chainable.&lt;/p&gt;
 </long-description>
-          <tag line="513" name="param" description="comma separated RGB value (e.g. '90, 55, 30')" type="string" variable="$rgb">
+          <tag line="551" name="throws" description="missing imagefilter function" type="\Exception">
+            <type by_reference="false">\Exception</type>
+          </tag>
+          <tag line="551" name="param" description="comma separated RGB value. Default: '90, 55, 30'." type="string" variable="$rgb">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="513" name="param" description="level of brightness" type="int" variable="$brightness">
+          <tag line="551" name="param" description="level of brightness. Default: -30." type="int" variable="$brightness">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="513" name="return" description="" type="object">
+          <tag line="551" name="return" description="the current object for fluent interface" type="object">
             <type by_reference="false">object</type>
           </tag>
-          <tag line="513" name="access" description="public"/>
+          <tag line="551" name="access" description="public"/>
         </docblock>
-        <argument line="523">
+        <argument line="562">
           <name>$rgb</name>
           <default>'90, 55, 30'</default>
           <type/>
         </argument>
-        <argument line="523">
+        <argument line="562">
           <name>$brightness</name>
           <default>-30</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="541" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="584" package="Default">
         <name>sharpen</name>
         <docblock>
           <description>Set sharpen.</description>
           <long-description>
 </long-description>
-          <tag line="534" name="param" description="sharpen image automatically at first save with optimal image sharpening detection" type="bool" variable="$value">
+          <tag line="577" name="param" description="sharpen image automatically at first save or render with optimal image sharpening detection. Enabled by default." type="bool" variable="$value">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="534" name="return" description="" type="object">
+          <tag line="577" name="return" description="the current object for fluent interface" type="object">
             <type by_reference="false">object</type>
           </tag>
-          <tag line="534" name="access" description="public"/>
+          <tag line="577" name="access" description="public"/>
         </docblock>
-        <argument line="541">
+        <argument line="584">
           <name>$value</name>
           <default>true</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="556" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="601" package="Default">
         <name>smooth</name>
         <docblock>
           <description>Set smooth.</description>
           <long-description>&lt;p&gt;This method is chainable.&lt;/p&gt;
 </long-description>
-          <tag line="547" name="param" description="level of smoothness -12 to 12. Values outside of the range -8 to 8 are usually unusable." type="int" variable="$value">
+          <tag line="591" name="throws" description="missing imagefilter function" type="\Exception">
+            <type by_reference="false">\Exception</type>
+          </tag>
+          <tag line="591" name="param" description="level of smoothness -12 to 12. Values outside of the range -8 to 8 are usually unusable. Default: 6." type="int" variable="$value">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="547" name="return" description="" type="object">
+          <tag line="591" name="return" description="the current object for fluent interface" type="object">
             <type by_reference="false">object</type>
           </tag>
-          <tag line="547" name="access" description="public"/>
+          <tag line="591" name="access" description="public"/>
         </docblock>
-        <argument line="556">
+        <argument line="601">
           <name>$value</name>
           <default>6</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="577" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="626" package="Default">
         <name>watermark</name>
         <docblock>
           <description>Add watermark to the image.</description>
           <long-description>&lt;p&gt;This method is chainable.&lt;/p&gt;
 </long-description>
-          <tag line="564" name="throws" description="" type="\Exception">
+          <tag line="613" name="throws" description="invalid image" type="\Exception">
             <type by_reference="false">\Exception</type>
           </tag>
-          <tag line="564" name="param" description="an absolute URL or path to file" type="string" variable="$file">
+          <tag line="613" name="param" description="an absolute URL or path to file" type="string" variable="$file">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="564" name="param" description="watermark transparency (0-100)" type="int" variable="$watermarkTransparency">
+          <tag line="613" name="param" description="watermark transparency (0-100). Default: 40." type="int" variable="$transparency">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="564" name="param" description="watermark padding in pixels" type="int" variable="$padding">
+          <tag line="613" name="param" description="watermark padding in pixels. Default: 2." type="int" variable="$padding">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="564" name="param" description="position of watermark (one of: TL, TR, BL or BR)" type="string" variable="$position">
+          <tag line="613" name="param" description="position of watermark (one of: TL, TR, BL or BR). Default: 'BR'." type="string" variable="$position">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="564" name="return" description="" type="object">
+          <tag line="613" name="return" description="the current object for fluent interface" type="object">
             <type by_reference="false">object</type>
           </tag>
-          <tag line="564" name="access" description="public"/>
+          <tag line="613" name="access" description="public"/>
         </docblock>
-        <argument line="577">
+        <argument line="626">
           <name>$file</name>
           <default/>
           <type/>
         </argument>
-        <argument line="577">
-          <name>$watermarkTransparency</name>
+        <argument line="626">
+          <name>$transparency</name>
           <default>40</default>
           <type/>
         </argument>
-        <argument line="577">
+        <argument line="626">
           <name>$padding</name>
           <default>2</default>
           <type/>
         </argument>
-        <argument line="577">
+        <argument line="626">
           <name>$position</name>
           <default>'BR'</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="624" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="673" package="Default">
         <name>mask</name>
         <docblock>
-          <description>Add mask layer to image. You create for example polaroid like images.</description>
+          <description>Add mask layer to image. You can create for example polaroid like images.</description>
           <long-description>&lt;p&gt;This method is chainable.&lt;/p&gt;
 </long-description>
-          <tag line="611" name="throws" description="" type="\Exception">
+          <tag line="660" name="throws" description="invalid image" type="\Exception">
             <type by_reference="false">\Exception</type>
           </tag>
-          <tag line="611" name="param" description="an absolute URL or path to mask .png file" type="string" variable="$file">
+          <tag line="660" name="param" description="an absolute URL or path to mask .png file" type="string" variable="$file">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="611" name="param" description="top position of resized image" type="int" variable="$top">
+          <tag line="660" name="param" description="top position of resized image. Default: 0." type="int" variable="$top">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="611" name="param" description="left position of resized image" type="int" variable="$left">
+          <tag line="660" name="param" description="left position of resized image. Default: 0." type="int" variable="$left">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="611" name="param" description="HEX color of the uncovered/transparent zone" type="string" variable="$bgColor">
+          <tag line="660" name="param" description="HEX color of the uncovered/transparent zone" type="string" variable="$bgColor">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="611" name="return" description="" type="object">
+          <tag line="660" name="return" description="the current object for fluent interface" type="object">
             <type by_reference="false">object</type>
           </tag>
-          <tag line="611" name="access" description="public"/>
+          <tag line="660" name="access" description="public"/>
         </docblock>
-        <argument line="624">
+        <argument line="673">
           <name>$file</name>
           <default/>
           <type/>
         </argument>
-        <argument line="624">
+        <argument line="673">
           <name>$top</name>
           <default>0</default>
           <type/>
         </argument>
-        <argument line="624">
+        <argument line="673">
           <name>$left</name>
           <default>0</default>
           <type/>
         </argument>
-        <argument line="624">
+        <argument line="673">
           <name>$bgColor</name>
           <default>''</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="676" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="725" package="Default">
         <name>save</name>
         <docblock>
           <description>Save the image.</description>
           <long-description>
 </long-description>
-          <tag line="665" name="throws" description="" type="\Exception">
+          <tag line="714" name="throws" description="invalid image type or directory is unwritable" type="\Exception">
             <type by_reference="false">\Exception</type>
           </tag>
-          <tag line="665" name="param" description="file path and output image file name. Directory must writable." type="string" variable="$path">
+          <tag line="714" name="param" description="file path and output image file name. Directory must writable." type="string" variable="$path">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="665" name="param" description="image quality: 0-100. Defaults to 80." type="int" variable="$imageQuality">
+          <tag line="714" name="param" description="image quality: 0-100. Default: 80." type="int" variable="$quality">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="665" name="param" description="destroy image resource identifiers on save" type="bool" variable="$destroy">
+          <tag line="714" name="param" description="destroy image resource identifiers on save. Enabled by default." type="bool" variable="$destroy">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="665" name="param" description="permissions for saved image" type="int" variable="$chmod">
+          <tag line="714" name="param" description="permissions for saved image. Default: 0644." type="int" variable="$chmod">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="665" name="return" description="" type="void">
+          <tag line="714" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
-          <tag line="665" name="access" description="public"/>
+          <tag line="714" name="access" description="public"/>
         </docblock>
-        <argument line="676">
+        <argument line="725">
           <name>$path</name>
           <default/>
           <type/>
         </argument>
-        <argument line="676">
-          <name>$imageQuality</name>
+        <argument line="725">
+          <name>$quality</name>
           <default>80</default>
           <type/>
         </argument>
-        <argument line="676">
+        <argument line="725">
           <name>$destroy</name>
           <default>true</default>
           <type/>
         </argument>
-        <argument line="676">
+        <argument line="725">
           <name>$chmod</name>
           <default>0644</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" line="764" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" line="814" package="Default">
         <name>render</name>
         <docblock>
           <description>Output the image to the browser without saving the image.</description>
           <long-description>
 </long-description>
-          <tag line="754" name="throws" description="" type="\Exception">
+          <tag line="804" name="throws" description="invalid image type" type="\Exception">
             <type by_reference="false">\Exception</type>
           </tag>
-          <tag line="754" name="param" description="output image file name" type="string" variable="$file">
+          <tag line="804" name="param" description="output image file name" type="string" variable="$file">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="754" name="param" description="image quality: 0-100. Defaults to 80" type="int" variable="$imageQuality">
+          <tag line="804" name="param" description="image quality: 0-100. Default: 80." type="int" variable="$quality">
             <type by_reference="false">int</type>
           </tag>
-          <tag line="754" name="param" description="destroy image resource identifiers on save" type="bool" variable="$destroy">
+          <tag line="804" name="param" description="destroy image resource identifiers on save. Enabled by default." type="bool" variable="$destroy">
             <type by_reference="false">bool</type>
           </tag>
-          <tag line="754" name="return" description="" type="void">
+          <tag line="804" name="return" description="" type="void">
             <type by_reference="false">void</type>
           </tag>
-          <tag line="754" name="access" description="public"/>
+          <tag line="804" name="access" description="public"/>
         </docblock>
-        <argument line="764">
+        <argument line="814">
           <name>$file</name>
           <default/>
           <type/>
         </argument>
-        <argument line="764">
-          <name>$imageQuality</name>
+        <argument line="814">
+          <name>$quality</name>
           <default>80</default>
           <type/>
         </argument>
-        <argument line="764">
+        <argument line="814">
           <name>$destroy</name>
           <default>true</default>
           <type/>
         </argument>
       </method>
+      
+      
       
       
       

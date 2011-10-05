@@ -14,7 +14,7 @@
                 $(".tabs").tabs();
             });
         </script></head><body><div xmlns="" id="content">
-	<script xmlns:dbx="http://docblox-project.org/xsl/functions">
+<script xmlns:dbx="http://docblox-project.org/xsl/functions">
 
       function filterElements()
       {
@@ -107,18 +107,23 @@
 
 <pre><code>include 'ImageUtil.php';
 
+// Render image without saving example:
+
 // an absolute URL or path to file. Can be .jpg, .jpeg, .gif or .png
 $img = new ImageUtil('images/large/input1.jpg');
 // set width and height and then render image. Can be .jpg, .jpeg, .gif or .png
 $img->resize(320, 240)->render('output.jpg');
 
+// Save image example:
+
 // an absolute URL or path to file. Can be .jpg, .jpeg, .gif or .png
 $img = new ImageUtil('images/large/input2.jpg');
+// set width, height and image resize option
 $img->resize(150, 100, 'crop')
        // add watermark
        ->watermark('images/large/watermark.png')
        // save path to file. Can be .jpg, .jpeg, .gif or .png
-       ->save('images/small/output.jpg', 80);
+       ->save('images/small/output.jpg');
 </code></pre>
 </div>
 </div>
@@ -165,7 +170,7 @@ $img->resize(150, 100, 'crop')
     </dd>
 <tr>
 <td><a href="http://php.net/manual/en/class.exception.php">\Exception</a></td>
-<td><em></em></td>
+<td><em>invalid image</em></td>
 </tr>
 </dl>
 <h3>Methods</h3>
@@ -206,7 +211,7 @@ $img->resize(150, 100, 'crop')
 </tr></thead>
 <tr>
 <td><a href="http://php.net/manual/en/class.exception.php">\Exception</a></td>
-<td><em></em></td>
+<td><em>invalid image</em></td>
 </tr>
 </table>
 </div>
@@ -233,7 +238,8 @@ $img->resize(150, 100, 'crop')
 <tr>
 <th>$type</th>
 <td>string</td>
-<td><em><p>blur type: gaussian or selective</p></em></td>
+<td><em><p>blur type: gaussian or selective. Default: 'gaussian'.</p>
+</em></td>
 </tr>
 </table>
 <strong>Returns</strong><table class="argument-info">
@@ -243,7 +249,17 @@ $img->resize(150, 100, 'crop')
 </tr></thead>
 <tr>
 <td>object</td>
-<td></td>
+<td>the current object for fluent interface</td>
+</tr>
+</table>
+<strong>Throws</strong><table class="argument-info">
+<thead><tr>
+<th>Exception</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td><a href="http://php.net/manual/en/class.exception.php">\Exception</a></td>
+<td><em>missing imagefilter function</em></td>
 </tr>
 </table>
 <strong>Details</strong><dl class="function-info">
@@ -276,7 +292,7 @@ $img->resize(150, 100, 'crop')
 <tr>
 <th>$value</th>
 <td>int</td>
-<td><em><p>level of brightness between -255 to 255</p>
+<td><em><p>level of brightness between -255 to 255. Default: -20.</p>
 </em></td>
 </tr>
 </table>
@@ -287,7 +303,17 @@ $img->resize(150, 100, 'crop')
 </tr></thead>
 <tr>
 <td>object</td>
-<td></td>
+<td>the current object for fluent interface</td>
+</tr>
+</table>
+<strong>Throws</strong><table class="argument-info">
+<thead><tr>
+<th>Exception</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td><a href="http://php.net/manual/en/class.exception.php">\Exception</a></td>
+<td><em>missing imagefilter function</em></td>
 </tr>
 </table>
 <strong>Details</strong><dl class="function-info">
@@ -320,7 +346,7 @@ $img->resize(150, 100, 'crop')
 <tr>
 <th>$value</th>
 <td>int</td>
-<td><em><p>level of contrast between -255 to 255</p>
+<td><em><p>level of contrast between -255 to 255. Default: -10.</p>
 </em></td>
 </tr>
 </table>
@@ -331,7 +357,17 @@ $img->resize(150, 100, 'crop')
 </tr></thead>
 <tr>
 <td>object</td>
-<td></td>
+<td>the current object for fluent interface</td>
+</tr>
+</table>
+<strong>Throws</strong><table class="argument-info">
+<thead><tr>
+<th>Exception</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td><a href="http://php.net/manual/en/class.exception.php">\Exception</a></td>
+<td><em>missing imagefilter function</em></td>
 </tr>
 </table>
 <strong>Details</strong><dl class="function-info">
@@ -362,7 +398,7 @@ $img->resize(150, 100, 'crop')
 <tr>
 <th>$key</th>
 <td>string</td>
-<td><em><p>The name of the option to retrieve</p></em></td>
+<td><em><p>the name of the option to retrieve</p></em></td>
 </tr>
 </table>
 <strong>Returns</strong><table class="argument-info">
@@ -401,7 +437,17 @@ $img->resize(150, 100, 'crop')
 </tr></thead>
 <tr>
 <td>object</td>
-<td></td>
+<td>the current object for fluent interface</td>
+</tr>
+</table>
+<strong>Throws</strong><table class="argument-info">
+<thead><tr>
+<th>Exception</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td><a href="http://php.net/manual/en/class.exception.php">\Exception</a></td>
+<td><em>missing imagefilter function</em></td>
 </tr>
 </table>
 <strong>Details</strong><dl class="function-info">
@@ -430,7 +476,7 @@ $img->resize(150, 100, 'crop')
 </tr></thead>
 <tr>
 <td>object</td>
-<td></td>
+<td>the current object for fluent interface</td>
 </tr>
 </table>
 <strong>Details</strong><dl class="function-info">
@@ -454,7 +500,7 @@ $img->resize(150, 100, 'crop')
           )
         </span>
         :
-          object</code><div class="description"><p class="short_description">Add mask layer to image. You create for example polaroid like images.</p></div>
+          object</code><div class="description"><p class="short_description">Add mask layer to image. You can create for example polaroid like images.</p></div>
 <div class="code-tabs">
 <div class="long-description"><p>This method is chainable.</p>
 </div>
@@ -472,12 +518,12 @@ $img->resize(150, 100, 'crop')
 <tr>
 <th>$top</th>
 <td>int</td>
-<td><em><p>top position of resized image</p></em></td>
+<td><em><p>top position of resized image. Default: 0.</p></em></td>
 </tr>
 <tr>
 <th>$left</th>
 <td>int</td>
-<td><em><p>left position of resized image</p></em></td>
+<td><em><p>left position of resized image. Default: 0.</p></em></td>
 </tr>
 <tr>
 <th>$bgColor</th>
@@ -493,7 +539,7 @@ $img->resize(150, 100, 'crop')
 </tr></thead>
 <tr>
 <td>object</td>
-<td></td>
+<td>the current object for fluent interface</td>
 </tr>
 </table>
 <strong>Throws</strong><table class="argument-info">
@@ -503,7 +549,7 @@ $img->resize(150, 100, 'crop')
 </tr></thead>
 <tr>
 <td><a href="http://php.net/manual/en/class.exception.php">\Exception</a></td>
-<td><em></em></td>
+<td><em>invalid image</em></td>
 </tr>
 </table>
 <strong>Details</strong><dl class="function-info">
@@ -536,7 +582,7 @@ $img->resize(150, 100, 'crop')
 <tr>
 <th>$value</th>
 <td>int</td>
-<td><em><p>factor between 0 and 255</p></em></td>
+<td><em><p>factor between 0 and 255. Default: 30.</p></em></td>
 </tr>
 </table>
 <strong>Returns</strong><table class="argument-info">
@@ -546,7 +592,7 @@ $img->resize(150, 100, 'crop')
 </tr></thead>
 <tr>
 <td>object</td>
-<td></td>
+<td>the current object for fluent interface</td>
 </tr>
 </table>
 <strong>Details</strong><dl class="function-info">
@@ -562,7 +608,9 @@ $img->resize(150, 100, 'crop')
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">pixelate</span><span class="nb-faded-text">(
           int $value
               =
-              10
+              10, bool $native
+              =
+              true
           )
         </span>
         :
@@ -579,7 +627,12 @@ $img->resize(150, 100, 'crop')
 <tr>
 <th>$value</th>
 <td>int</td>
-<td><em><p>size of pixels</p></em></td>
+<td><em><p>size of pixels. Default: 10.</p></em></td>
+</tr>
+<tr>
+<th>$native</th>
+<td>bool</td>
+<td><em><p>use native GD library pixelate filter if available. Enabled by default.</p></em></td>
 </tr>
 </table>
 <strong>Returns</strong><table class="argument-info">
@@ -589,7 +642,7 @@ $img->resize(150, 100, 'crop')
 </tr></thead>
 <tr>
 <td>object</td>
-<td></td>
+<td>the current object for fluent interface</td>
 </tr>
 </table>
 <strong>Details</strong><dl class="function-info">
@@ -622,7 +675,7 @@ $img->resize(150, 100, 'crop')
 <tr>
 <th>$value</th>
 <td>int</td>
-<td><em><p>maximum circle size in pixels</p></em></td>
+<td><em><p>maximum circle size in pixels. Default: 6.</p></em></td>
 </tr>
 </table>
 <strong>Returns</strong><table class="argument-info">
@@ -632,7 +685,7 @@ $img->resize(150, 100, 'crop')
 </tr></thead>
 <tr>
 <td>object</td>
-<td></td>
+<td>the current object for fluent interface</td>
 </tr>
 </table>
 <strong>Details</strong><dl class="function-info">
@@ -646,7 +699,7 @@ $img->resize(150, 100, 'crop')
 </div>
 <a id="\ImageUtil::render()" class="anchor"></a><div class="method public">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">render</span><span class="nb-faded-text">(
-          string $file, int $imageQuality
+          string $file, int $quality
               =
               80, bool $destroy
               =
@@ -670,15 +723,15 @@ $img->resize(150, 100, 'crop')
 <td><em><p>output image file name</p></em></td>
 </tr>
 <tr>
-<th>$imageQuality</th>
+<th>$quality</th>
 <td>int</td>
-<td><em><p>image quality: 0-100. Defaults to 80</p>
+<td><em><p>image quality: 0-100. Default: 80.</p>
 </em></td>
 </tr>
 <tr>
 <th>$destroy</th>
 <td>bool</td>
-<td><em><p>destroy image resource identifiers on save</p></em></td>
+<td><em><p>destroy image resource identifiers on save. Enabled by default.</p></em></td>
 </tr>
 </table>
 <strong>Throws</strong><table class="argument-info">
@@ -688,7 +741,7 @@ $img->resize(150, 100, 'crop')
 </tr></thead>
 <tr>
 <td><a href="http://php.net/manual/en/class.exception.php">\Exception</a></td>
-<td><em></em></td>
+<td><em>invalid image type</em></td>
 </tr>
 </table>
 <strong>Details</strong><dl class="function-info">
@@ -731,7 +784,8 @@ $img->resize(150, 100, 'crop')
 <tr>
 <th>$option</th>
 <td>string</td>
-<td><em><p>one of the image resize options: exact, portrait, landscape, crop or auto. Defaults to auto.</p></em></td>
+<td><em><p>one of the image resize options: exact, portrait, landscape, crop or auto. Default: 'auto'.</p>
+</em></td>
 </tr>
 </table>
 <strong>Returns</strong><table class="argument-info">
@@ -741,7 +795,7 @@ $img->resize(150, 100, 'crop')
 </tr></thead>
 <tr>
 <td>object</td>
-<td></td>
+<td>the current object for fluent interface</td>
 </tr>
 </table>
 <strong>Details</strong><dl class="function-info">
@@ -776,13 +830,14 @@ $img->resize(150, 100, 'crop')
 <tr>
 <th>$value</th>
 <td>mixed</td>
-<td><em><p>rotation angle in degrees between -360 and 360 or random</p>
+<td><em><p>rotation angle in degrees between -360 and 360 or random. Default: 'random'.</p>
 </em></td>
 </tr>
 <tr>
 <th>$bgColor</th>
 <td>string</td>
-<td><em><p>HEX color of the uncovered zone after the rotation</p></em></td>
+<td><em><p>HEX color of the uncovered zone after the rotation. Default: 'ffffff'.</p>
+</em></td>
 </tr>
 </table>
 <strong>Returns</strong><table class="argument-info">
@@ -792,7 +847,7 @@ $img->resize(150, 100, 'crop')
 </tr></thead>
 <tr>
 <td>object</td>
-<td></td>
+<td>the current object for fluent interface</td>
 </tr>
 </table>
 <strong>Details</strong><dl class="function-info">
@@ -806,7 +861,7 @@ $img->resize(150, 100, 'crop')
 </div>
 <a id="\ImageUtil::save()" class="anchor"></a><div class="method public">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">save</span><span class="nb-faded-text">(
-          string $path, int $imageQuality
+          string $path, int $quality
               =
               80, bool $destroy
               =
@@ -832,20 +887,20 @@ $img->resize(150, 100, 'crop')
 <td><em><p>file path and output image file name. Directory must writable.</p></em></td>
 </tr>
 <tr>
-<th>$imageQuality</th>
+<th>$quality</th>
 <td>int</td>
-<td><em><p>image quality: 0-100. Defaults to 80.</p>
+<td><em><p>image quality: 0-100. Default: 80.</p>
 </em></td>
 </tr>
 <tr>
 <th>$destroy</th>
 <td>bool</td>
-<td><em><p>destroy image resource identifiers on save</p></em></td>
+<td><em><p>destroy image resource identifiers on save. Enabled by default.</p></em></td>
 </tr>
 <tr>
 <th>$chmod</th>
 <td>int</td>
-<td><em><p>permissions for saved image</p></em></td>
+<td><em><p>permissions for saved image. Default: 0644.</p></em></td>
 </tr>
 </table>
 <strong>Throws</strong><table class="argument-info">
@@ -855,7 +910,7 @@ $img->resize(150, 100, 'crop')
 </tr></thead>
 <tr>
 <td><a href="http://php.net/manual/en/class.exception.php">\Exception</a></td>
-<td><em></em></td>
+<td><em>invalid image type or directory is unwritable</em></td>
 </tr>
 </table>
 <strong>Details</strong><dl class="function-info">
@@ -888,7 +943,7 @@ $img->resize(150, 100, 'crop')
 <tr>
 <th>$value</th>
 <td>int</td>
-<td><em><p>intensity</p></em></td>
+<td><em><p>intensity. Default: 4.</p></em></td>
 </tr>
 </table>
 <strong>Returns</strong><table class="argument-info">
@@ -898,7 +953,7 @@ $img->resize(150, 100, 'crop')
 </tr></thead>
 <tr>
 <td>object</td>
-<td></td>
+<td>the current object for fluent interface</td>
 </tr>
 </table>
 <strong>Details</strong><dl class="function-info">
@@ -933,13 +988,14 @@ $img->resize(150, 100, 'crop')
 <tr>
 <th>$rgb</th>
 <td>string</td>
-<td><em><p>comma separated RGB value (e.g. '90, 55, 30')</p>
+<td><em><p>comma separated RGB value. Default: '90, 55, 30'.</p>
 </em></td>
 </tr>
 <tr>
 <th>$brightness</th>
 <td>int</td>
-<td><em><p>level of brightness</p></em></td>
+<td><em><p>level of brightness. Default: -30.</p>
+</em></td>
 </tr>
 </table>
 <strong>Returns</strong><table class="argument-info">
@@ -949,7 +1005,17 @@ $img->resize(150, 100, 'crop')
 </tr></thead>
 <tr>
 <td>object</td>
-<td></td>
+<td>the current object for fluent interface</td>
+</tr>
+</table>
+<strong>Throws</strong><table class="argument-info">
+<thead><tr>
+<th>Exception</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td><a href="http://php.net/manual/en/class.exception.php">\Exception</a></td>
+<td><em>missing imagefilter function</em></td>
 </tr>
 </table>
 <strong>Details</strong><dl class="function-info">
@@ -982,7 +1048,7 @@ $img->resize(150, 100, 'crop')
 <tr>
 <th>$value</th>
 <td>bool</td>
-<td><em><p>sharpen image automatically at first save with optimal image sharpening detection</p></em></td>
+<td><em><p>sharpen image automatically at first save or render with optimal image sharpening detection. Enabled by default.</p></em></td>
 </tr>
 </table>
 <strong>Returns</strong><table class="argument-info">
@@ -992,7 +1058,7 @@ $img->resize(150, 100, 'crop')
 </tr></thead>
 <tr>
 <td>object</td>
-<td></td>
+<td>the current object for fluent interface</td>
 </tr>
 </table>
 <strong>Details</strong><dl class="function-info">
@@ -1025,7 +1091,7 @@ $img->resize(150, 100, 'crop')
 <tr>
 <th>$value</th>
 <td>int</td>
-<td><em><p>level of smoothness -12 to 12. Values outside of the range -8 to 8 are usually unusable.</p>
+<td><em><p>level of smoothness -12 to 12. Values outside of the range -8 to 8 are usually unusable. Default: 6.</p>
 </em></td>
 </tr>
 </table>
@@ -1036,7 +1102,17 @@ $img->resize(150, 100, 'crop')
 </tr></thead>
 <tr>
 <td>object</td>
-<td></td>
+<td>the current object for fluent interface</td>
+</tr>
+</table>
+<strong>Throws</strong><table class="argument-info">
+<thead><tr>
+<th>Exception</th>
+<th>Description</th>
+</tr></thead>
+<tr>
+<td><a href="http://php.net/manual/en/class.exception.php">\Exception</a></td>
+<td><em>missing imagefilter function</em></td>
 </tr>
 </table>
 <strong>Details</strong><dl class="function-info">
@@ -1050,7 +1126,7 @@ $img->resize(150, 100, 'crop')
 </div>
 <a id="\ImageUtil::watermark()" class="anchor"></a><div class="method public">
 <a href="#" class="gripper"><img src="images/icons/arrow_right.png"><img src="images/icons/arrow_down.png" style="display: none;"></a><code><img src="images/icons/method.png" alt="method"><img src="images/icons/visibility_public.png" style="margin-right: 5px" alt="public"><span class="highlight">watermark</span><span class="nb-faded-text">(
-          string $file, int $watermarkTransparency
+          string $file, int $transparency
               =
               40, int $padding
               =
@@ -1076,20 +1152,20 @@ $img->resize(150, 100, 'crop')
 <td><em><p>an absolute URL or path to file</p></em></td>
 </tr>
 <tr>
-<th>$watermarkTransparency</th>
+<th>$transparency</th>
 <td>int</td>
-<td><em><p>watermark transparency (0-100)</p>
+<td><em><p>watermark transparency (0-100). Default: 40.</p>
 </em></td>
 </tr>
 <tr>
 <th>$padding</th>
 <td>int</td>
-<td><em><p>watermark padding in pixels</p></em></td>
+<td><em><p>watermark padding in pixels. Default: 2.</p></em></td>
 </tr>
 <tr>
 <th>$position</th>
 <td>string</td>
-<td><em><p>position of watermark (one of: TL, TR, BL or BR)</p>
+<td><em><p>position of watermark (one of: TL, TR, BL or BR). Default: 'BR'.</p>
 </em></td>
 </tr>
 </table>
@@ -1100,7 +1176,7 @@ $img->resize(150, 100, 'crop')
 </tr></thead>
 <tr>
 <td>object</td>
-<td></td>
+<td>the current object for fluent interface</td>
 </tr>
 </table>
 <strong>Throws</strong><table class="argument-info">
@@ -1110,7 +1186,7 @@ $img->resize(150, 100, 'crop')
 </tr></thead>
 <tr>
 <td><a href="http://php.net/manual/en/class.exception.php">\Exception</a></td>
-<td><em></em></td>
+<td><em>invalid image</em></td>
 </tr>
 </table>
 <strong>Details</strong><dl class="function-info">

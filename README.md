@@ -12,6 +12,11 @@ Optional: jpegtran, pngcrush.
 Changelog
 ---------
 
+### v2.1
+
+- Better support for Debian / Ubuntu
+- Code clean up
+
 ### v2.0
 
 - BC break!
@@ -59,11 +64,12 @@ Usage
 	
 	// an absolute URL or path to file. Can be .jpg, .jpeg, .gif or .png
 	$img = new ImageUtil('images/large/input2.jpg');
+	// set width, height and image resize option
 	$img->resize(150, 100, 'crop')
 		// add watermark
 		->watermark('images/large/watermark.png')
 		// save path to file. Can be .jpg, .jpeg, .gif or .png
-		->save('images/small/output.jpg', 80);
+		->save('images/small/output.jpg');
 
 Documentation
 --------
